@@ -54,6 +54,7 @@ import { ModelV2 } from "@opencode-ai/core/model"
 import { MCP } from "@/mcp"
 import { PermissionV1 } from "@opencode-ai/core/v1/permission"
 import { McpCatalog } from "@/mcp/catalog"
+import { ContextUsageTool } from "./context"
 
 export function webSearchEnabled(providerID: ProviderV2.ID, flags = { exa: false, parallel: false }) {
   return (
@@ -223,6 +224,7 @@ const layer = Layer.effect(
           question: Tool.init(question),
           lsp: Tool.init(lsptool),
           plan: Tool.init(plan),
+          context: Tool.init(ContextUsageTool),
           ...(codeModeTool ? { execute: Tool.init(codeModeTool) } : {}),
         })
 
@@ -240,6 +242,7 @@ const layer = Layer.effect(
             tool.task,
             tool.fetch,
             tool.todo,
+            tool.context,
             tool.search,
             tool.skill,
             tool.patch,
