@@ -55,6 +55,7 @@ import { MCP } from "@/mcp"
 import { PermissionV1 } from "@opencode-ai/core/v1/permission"
 import { McpCatalog } from "@/mcp/catalog"
 import { ContextUsageTool } from "./context"
+import { NewSessionTool } from "./new-session"
 
 export function webSearchEnabled(providerID: ProviderV2.ID, flags = { exa: false, parallel: false }) {
   return (
@@ -206,6 +207,7 @@ const layer = Layer.effect(
 
         yield* config.get()
         const questionEnabled = ["app", "cli", "desktop"].includes(flags.client) || flags.enableQuestionTool
+        const tui = ["app", "cli", "desktop"].includes(flags.client)
 
         const tool = yield* Effect.all({
           invalid: Tool.init(invalid),
@@ -225,6 +227,7 @@ const layer = Layer.effect(
           lsp: Tool.init(lsptool),
           plan: Tool.init(plan),
           context: Tool.init(ContextUsageTool),
+          session: Tool.init(NewSessionTool),
           ...(codeModeTool ? { execute: Tool.init(codeModeTool) } : {}),
         })
 
@@ -243,6 +246,7 @@ const layer = Layer.effect(
             tool.fetch,
             tool.todo,
             tool.context,
+            ...(tui ? [tool.session] : []),
             tool.search,
             tool.skill,
             tool.patch,
