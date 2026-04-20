@@ -116,6 +116,8 @@ const layer = Layer.effect(
     const greptool = yield* GrepTool
     const patchtool = yield* ApplyPatchTool
     const skilltool = yield* SkillTool
+    const contexttool = yield* ContextUsageTool
+    const newsessiontool = yield* NewSessionTool
     const agent = yield* Agent.Service
     const codeMode = flags.experimentalCodeMode ? yield* Effect.promise(() => import("./code-mode")) : undefined
     const codeModeTool = codeMode ? yield* codeMode.CodeModeTool : undefined
@@ -226,8 +228,8 @@ const layer = Layer.effect(
           question: Tool.init(question),
           lsp: Tool.init(lsptool),
           plan: Tool.init(plan),
-          context: Tool.init(ContextUsageTool),
-          session: Tool.init(NewSessionTool),
+          context: Tool.init(contexttool),
+          session: Tool.init(newsessiontool),
           ...(codeModeTool ? { execute: Tool.init(codeModeTool) } : {}),
         })
 
