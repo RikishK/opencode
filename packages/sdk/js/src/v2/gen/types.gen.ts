@@ -75,6 +75,7 @@ export type Event =
   | EventTuiCommandExecute2
   | EventTuiToastShow2
   | EventTuiSessionSelect2
+  | EventTuiSessionNew
   | EventMcpToolsChanged
   | EventMcpBrowserOpenFailed
   | EventCommandExecuted
@@ -157,12 +158,27 @@ export type SnapshotFileDiff = {
   status?: "added" | "deleted" | "modified"
 }
 
+export type EventTuiSessionNew = {
+  type: "tui.session.new"
+  properties: {
+    /**
+     * Initial message to send in the new session
+     */
+    message: string
+    /**
+     * Session ID of the current session to abort
+     */
+    sessionID: string
+  }
+}
+
 export type PermissionAction = "allow" | "deny" | "ask"
 
 export type PermissionRule = {
   permission: string
   pattern: string
   action: PermissionAction
+}
 }
 
 export type PermissionRuleset = Array<PermissionRule>
@@ -2650,6 +2666,7 @@ export type EventTuiSessionSelect = {
      */
     sessionID: string
   }
+}
 }
 
 export type Workspace = {
@@ -10877,7 +10894,7 @@ export type TuiShowToastResponses = {
 export type TuiShowToastResponse = TuiShowToastResponses[keyof TuiShowToastResponses]
 
 export type TuiPublishData = {
-  body?: EventTuiPromptAppend | EventTuiCommandExecute | EventTuiToastShow | EventTuiSessionSelect
+  body?: EventTuiPromptAppend | EventTuiCommandExecute | EventTuiToastShow | EventTuiSessionSelect | EventTuiSessionNew
   path?: never
   query?: {
     directory?: string
